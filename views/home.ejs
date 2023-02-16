@@ -98,7 +98,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="fetched-data">
                 <div class="data-pill">
                     Price per coin
@@ -134,19 +133,22 @@
         </div>
 
 
-         <!-- graph section -->
-    <div style="background-color: white; border-radius:5px; max-height: 50vh;">
+        <!-- graph section -->
         <div>
-            <canvas id="myChart" style="height:500px; "></canvas>
+            <h3>Graph</h3>
+            <div style="background-color: rgb(44, 39, 58);color: white; border-radius:16px; max-height: 50vh;">
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
         </div>
-    </div>
 
 
         <!-- blog -->
         <div class="yt-section">
             <h3>Blog</h3>
             <div id="blogs-sec">
-                
+
             </div>
             <!-- <div id="blogitems">
                 <div id="blogitem">
@@ -201,7 +203,7 @@
     //graph
     var time = [];
     var val = [];
-    let myChart=null;
+    let myChart = null;
 
     select.forEach(a => {
         a.addEventListener('click', b => {
@@ -318,22 +320,22 @@
 
     }
 
-    // mediastack news api
+    // news api
     function getBlog(coin) {
         // var temp;
         $.ajax({
-            url: `https://newsdata.io/api/1/news?apikey=pub_17343763d4e028930b9019315f662b17747b5&q=${coin}`,
+            url: `https://newsdata.io/api/1/news?apikey=pub_17343763d4e028930b9019315f662b17747b5&q=${coin}&language=en`,
             type: "GET",
             async: false,
             dataType: 'json',
             success: (blog) => {
                 console.log(blog);
-                let blogsData="";
-                count=0;
+                let blogsData = "";
+                count = 0;
                 $.each(blog.results, (key, value) => {
                     count++;
-                    if(count==6)return;
-                    blogsData+=`<div class="blogitems m-4">
+                    if (count == 6) return;
+                    blogsData += `<div class="blogitems m-4">
                 <div class="blogitem">
                     <h3 class="blogtitle">${value.title} 
                     </h3>
@@ -407,7 +409,7 @@
                     time.push(s);
                     val.push(value[1]);
                 });
-                
+
                 // let date = new Date();
                 // document.getElementById('desc').innerHTML = data.description.en;
             },
@@ -418,35 +420,35 @@
         });
 
         // graph plotting
-    
-    const ctx = document.getElementById('myChart');
-    if(myChart!=null){
-        myChart.destroy();
-    }
-    myChart=new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: time,
-            datasets: [{
-                label: 'Price: ',
-                data: val,
-                borderWidth: 2,
-                // borderColor: '#d0d0d0',
-                // backgroundColor: '#d0d0d0',
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    // beginAtZero: true
-                },
-                x:{
-                    min: 0,
-                    max: 100
+
+        const ctx = document.getElementById('myChart');
+        if (myChart != null) {
+            myChart.destroy();
+        }
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: 'Price: ',
+                    data: val,
+                    borderWidth: 2,
+                    // borderColor: '#d0d0d0',
+                    // backgroundColor: '#d0d0d0',
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        // beginAtZero: true
+                    },
+                    x: {
+                        min: 0,
+                        max: 100
+                    }
                 }
             }
-        }
-    });
+        });
     }
 </script>
 
