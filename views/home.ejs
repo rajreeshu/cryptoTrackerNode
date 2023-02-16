@@ -125,12 +125,27 @@
                 </div>
             </div>
         </div>
+        <!-- description -->
         <div class="description">
             <h3>Description</h3>
             <p id="desc">
 
             </p>
         </div>
+
+        <!-- blog -->
+        <div class="yt-section">
+            <h3>Blog</h3>
+            <div id="blogitem">
+                <h3 id="blogtitle"> 
+                </h3>
+                <p id="blogdesc">
+                </p>
+                <a id="blogurl" href="">Read More</a>
+            </div>
+        </div>
+
+        <!-- yt video -->
         <div class="yt-section">
             <h3>Related Videos</h3>
             <div class="yt-content">
@@ -221,7 +236,7 @@
 
     function fetchApi(coin) {
         count = 0;
-        startTimer();
+        // startTimer();
         $.ajax({
             url: `https://api.coinstats.app/public/v1/coins/${coin}?currency=INR`,
             type: "GET",
@@ -248,7 +263,8 @@
                 }
 
                 getGecko(coin);
-                addVideo(coin);
+                getBlog(coin);
+                // addVideo(coin);
 
             },
             error: (error) => {
@@ -267,7 +283,7 @@
             async: false,
             dataType: 'json',
             success: (data) => {
-                console.log(data);
+                // console.log(data);
                 let date = new Date();
                 document.getElementById('desc').innerHTML = data.description.en;
             },
@@ -278,7 +294,26 @@
         });
 
     }
-    
+
+     // mediastack news api
+     function getBlog(coin) {
+        $.ajax({
+            url: `http://api.mediastack.com/v1/news?access_key=665a3d8718ebb489444961e895ae2d1a&keywords=${coin}&languages=en`,
+            type: "GET",
+            async: false,
+            dataType: 'json',
+            success: (blog) => {
+                console.log(blog);
+                document.getElementById('blogtitle').innerHTML = blog.data[0].title;
+                document.getElementById('blogdesc').innerHTML = blog.data[0].description;
+                document.getElementById('blogurl').href = blog.data[0].url;
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
+
     fetchApi(globalCoin);
 
     function addVideo(coin) {
@@ -317,6 +352,4 @@
 
     }
 </script>
-
-
 </html>

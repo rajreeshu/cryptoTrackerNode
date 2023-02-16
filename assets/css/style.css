@@ -340,6 +340,11 @@ body {
   max-height: 240px;
   overflow-y: auto;
 }
+#blogitem{
+  padding: 16px 24px;
+  border-radius: 12px;
+  background-color: #d1bff810;
+}
 
 /* media queries */
 @media only screen and (max-width: 540px) {
