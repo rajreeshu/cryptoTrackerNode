@@ -125,12 +125,30 @@
                 </div>
             </div>
         </div>
-        <div class="description">
+        <!-- description -->
+        <div class="yt-section">
             <h3>Description</h3>
             <p id="desc">
 
             </p>
         </div>
+
+        <!-- blog -->
+        <div class="yt-section">
+            <h3>Blog</h3>
+            <div id="blogitems">
+                <div id="blogitem">
+                    <h3 id="blogtitle"> 
+                    </h3>
+                    <p id="blogdesc">
+                    </p>
+                    <a id="blogurl" href="">Read More</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- yt video -->
         <div class="yt-section">
             <h3>Related Videos</h3>
             <div class="yt-content">
@@ -158,7 +176,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"
     integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
-    </script>
+</script>
 
 <!-- script for cusotom select -->
 
@@ -221,7 +239,7 @@
 
     function fetchApi(coin) {
         count = 0;
-        startTimer();
+        // startTimer();
         $.ajax({
             url: `https://api.coinstats.app/public/v1/coins/${coin}?currency=INR`,
             type: "GET",
@@ -248,7 +266,8 @@
                 }
 
                 getGecko(coin);
-                addVideo(coin);
+                getBlog(coin);
+                // addVideo(coin);
 
             },
             error: (error) => {
@@ -267,7 +286,7 @@
             async: false,
             dataType: 'json',
             success: (data) => {
-                console.log(data);
+                // console.log(data);
                 let date = new Date();
                 document.getElementById('desc').innerHTML = data.description.en;
             },
@@ -278,7 +297,40 @@
         });
 
     }
-    
+
+    // mediastack news api
+    function getBlog(coin) {
+        // var temp;
+        $.ajax({
+            url: `http://api.mediastack.com/v1/news?access_key=665a3d8718ebb489444961e895ae2d1a&keywords=${coin}&languages=en`,
+            type: "GET",
+            async: false,
+            dataType: 'json',
+            success: (blog) => {
+                console.log(blog);
+                // for (i = 0; i < blog.data.length; i++) {
+                //     temp = document.createElement('div');
+                //     temp.id = 'blogitem';
+                //     temp.innerHTML = '<h3 id="blogtitle">'
+                //              +blog.data[i].title+
+                //         '</h3>'
+                //         '<p id="blogdesc">'
+                //             +blog.data[i].description+
+                //         '</p>'
+                //         '<a id="'+blog.data[i].url+'" href="">Read More</a>';
+                //     document.getElementById('items')[0].appendChild(temp);
+                // }
+
+                document.getElementById('blogtitle').innerHTML = blog.data[0].title;
+                document.getElementById('blogdesc').innerHTML = blog.data[0].description;
+                document.getElementById('blogurl').href = blog.data[0].url;
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
+
     fetchApi(globalCoin);
 
     function addVideo(coin) {
@@ -317,6 +369,5 @@
 
     }
 </script>
-
 
 </html>
