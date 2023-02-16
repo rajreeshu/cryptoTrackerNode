@@ -330,15 +330,18 @@ body {
   height: 18px;
   width: 18px;
 }
-.description{
-  padding: 48px 0px 0px 0px;
-}
+
 #desc{
   font-size: 14px;
   color: #ffffffbd;
   width: 80vw;
   max-height: 240px;
   overflow-y: auto;
+}
+.blogitem{
+  padding: 16px 24px;
+  border-radius: 12px;
+  background-color: #d1bff810;
 }
 
 /* media queries */

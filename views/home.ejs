@@ -125,7 +125,8 @@
                 </div>
             </div>
         </div>
-        <div class="description">
+        <!-- description -->
+        <div class="yt-section">
             <h3>Description</h3>
             <p id="desc">
 
@@ -141,6 +142,25 @@
     </div>
 
 
+        <!-- blog -->
+        <div class="yt-section">
+            <h3>Blog</h3>
+            <div id="blogs-sec">
+                
+            </div>
+            <!-- <div id="blogitems">
+                <div id="blogitem">
+                    <h3 id="blogtitle"> 
+                    </h3>
+                    <p id="blogdesc">
+                    </p>
+                    <a id="blogurl" href="">Read More</a>
+                </div>
+            </div> -->
+
+        </div>
+
+        <!-- yt video -->
         <div class="yt-section">
             <h3>Related Videos</h3>
             <div class="yt-content">
@@ -168,7 +188,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"
     integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
-    </script>
+</script>
 
 <!-- script for cusotom select -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -237,7 +257,7 @@
 
     function fetchApi(coin) {
         count = 0;
-        startTimer();
+        // startTimer();
         $.ajax({
             url: `https://api.coinstats.app/public/v1/coins/${coin}?currency=INR`,
             type: "GET",
@@ -266,6 +286,8 @@
                 getGecko(coin);
                 addVideo(coin);
                 getGraph(coin);
+                getBlog(coin);
+                // addVideo(coin);
 
             },
             error: (error) => {
@@ -284,7 +306,7 @@
             async: false,
             dataType: 'json',
             success: (data) => {
-                console.log(data);
+                // console.log(data);
                 let date = new Date();
                 document.getElementById('desc').innerHTML = data.description.en;
             },
@@ -295,7 +317,45 @@
         });
 
     }
-    
+
+    // mediastack news api
+    function getBlog(coin) {
+        // var temp;
+        $.ajax({
+            url: `https://newsdata.io/api/1/news?apikey=pub_17343763d4e028930b9019315f662b17747b5&q=${coin}`,
+            type: "GET",
+            async: false,
+            dataType: 'json',
+            success: (blog) => {
+                console.log(blog);
+                let blogsData="";
+                count=0;
+                $.each(blog.results, (key, value) => {
+                    count++;
+                    if(count==6)return;
+                    blogsData+=`<div class="blogitems m-4">
+                <div class="blogitem">
+                    <h3 class="blogtitle">${value.title} 
+                    </h3>
+                    <p class="blogdesc">${value.description}
+                    </p>
+                    <a class="blogurl" href="${value.link}">Read More</a>
+                </div>
+            </div>`;
+                });
+                console.log(blogsData);
+                $("#blogs-sec").append(blogsData);
+
+                // document.getElementById('blogtitle').innerHTML = blog.data[0].title;
+                // document.getElementById('blogdesc').innerHTML = blog.data[0].description;
+                // document.getElementById('blogurl').href = blog.data[0].url;
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
+
     fetchApi(globalCoin);
 
     function addVideo(coin) {
@@ -389,6 +449,5 @@
     });
     }
 </script>
-
 
 </html>
