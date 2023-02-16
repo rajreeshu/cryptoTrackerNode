@@ -126,7 +126,7 @@
             </div>
         </div>
         <!-- description -->
-        <div class="description">
+        <div class="yt-section">
             <h3>Description</h3>
             <p id="desc">
 
@@ -136,13 +136,16 @@
         <!-- blog -->
         <div class="yt-section">
             <h3>Blog</h3>
-            <div id="blogitem">
-                <h3 id="blogtitle"> 
-                </h3>
-                <p id="blogdesc">
-                </p>
-                <a id="blogurl" href="">Read More</a>
+            <div id="blogitems">
+                <div id="blogitem">
+                    <h3 id="blogtitle"> 
+                    </h3>
+                    <p id="blogdesc">
+                    </p>
+                    <a id="blogurl" href="">Read More</a>
+                </div>
             </div>
+
         </div>
 
         <!-- yt video -->
@@ -173,7 +176,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"
     integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
-    </script>
+</script>
 
 <!-- script for cusotom select -->
 
@@ -295,8 +298,9 @@
 
     }
 
-     // mediastack news api
-     function getBlog(coin) {
+    // mediastack news api
+    function getBlog(coin) {
+        // var temp;
         $.ajax({
             url: `http://api.mediastack.com/v1/news?access_key=665a3d8718ebb489444961e895ae2d1a&keywords=${coin}&languages=en`,
             type: "GET",
@@ -304,6 +308,19 @@
             dataType: 'json',
             success: (blog) => {
                 console.log(blog);
+                // for (i = 0; i < blog.data.length; i++) {
+                //     temp = document.createElement('div');
+                //     temp.id = 'blogitem';
+                //     temp.innerHTML = '<h3 id="blogtitle">'
+                //              +blog.data[i].title+
+                //         '</h3>'
+                //         '<p id="blogdesc">'
+                //             +blog.data[i].description+
+                //         '</p>'
+                //         '<a id="'+blog.data[i].url+'" href="">Read More</a>';
+                //     document.getElementById('items')[0].appendChild(temp);
+                // }
+
                 document.getElementById('blogtitle').innerHTML = blog.data[0].title;
                 document.getElementById('blogdesc').innerHTML = blog.data[0].description;
                 document.getElementById('blogurl').href = blog.data[0].url;
@@ -352,4 +369,5 @@
 
     }
 </script>
+
 </html>
