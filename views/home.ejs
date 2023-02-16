@@ -131,6 +131,16 @@
 
             </p>
         </div>
+
+
+         <!-- graph section -->
+    <div style="background-color: white; border-radius:5px; max-height: 50vh;">
+        <div>
+            <canvas id="myChart" style="height:500px; "></canvas>
+        </div>
+    </div>
+
+
         <div class="yt-section">
             <h3>Related Videos</h3>
             <div class="yt-content">
@@ -161,11 +171,17 @@
     </script>
 
 <!-- script for cusotom select -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     const select = document.querySelectorAll('.selectBtn');
     const option = document.querySelectorAll('.option');
     let index = 1;
+
+    //graph
+    var time = [];
+    var val = [];
+    let myChart=null;
 
     select.forEach(a => {
         a.addEventListener('click', b => {
@@ -249,6 +265,7 @@
 
                 getGecko(coin);
                 addVideo(coin);
+                getGraph(coin);
 
             },
             error: (error) => {
@@ -282,39 +299,94 @@
     fetchApi(globalCoin);
 
     function addVideo(coin) {
+        // $.ajax({
+        //     url: "https://list.ly/api/v4/search/video?q=" + coin + " latest news",
+        //     type: "GET",
+        //     async: false,
+        //     dataType: 'json',
+        //     success: (data) => {
+        //         // console.log(data);
+        //         let videoDiv = "";
+        //         let count = 0;
+        //         $.each(data.results, (key, value) => {
+        //             count++;
+        //             if (count > 5) return;
+        //             // console.log(value);if (data.video != undefined && data.video != "") {
+        //             let video_play_link = "";
+        //             if (value.url.search('embed') == -1) {
+        //                 video_play_link = value.url.replace('/watch?v=', /embed/);
+        //             } else {
+        //                 return;
+        //             }
+        //             console.log(video_play_link)
+        //             videoDiv += '<div class="col-12 col-md-4 col-lg-3 p-3">';
+        //             videoDiv += '<iframe style="width:100%;height:240px;" src="' + video_play_link +
+        //                 '"></iframe><br>' + value.name + '<br>';
+        //             videoDiv += '</div>';
+        //         });
+        //         // console.log(videoDiv);
+        //         $("#videoDiv").html(videoDiv);
+        //     },
+        //     error: (data) => {
+        //         console.log(data);
+        //     }
+        // });
+
+    }
+
+    function getGraph(coins) {
         $.ajax({
-            url: "https://list.ly/api/v4/search/video?q=" + coin + " latest news",
+            url: `https://api.coingecko.com/api/v3/coins/${coins}/market_chart?vs_currency=inr&days=10&interval=daily`,
             type: "GET",
             async: false,
             dataType: 'json',
             success: (data) => {
-                // console.log(data);
-                let videoDiv = "";
-                let count = 0;
-                $.each(data.results, (key, value) => {
-                    count++;
-                    if (count > 5) return;
-                    // console.log(value);if (data.video != undefined && data.video != "") {
-                    let video_play_link = "";
-                    if (value.url.search('embed') == -1) {
-                        video_play_link = value.url.replace('/watch?v=', /embed/);
-                    } else {
-                        return;
-                    }
-                    console.log(video_play_link)
-                    videoDiv += '<div class="col-12 col-md-4 col-lg-3 p-3">';
-                    videoDiv += '<iframe style="width:100%;height:240px;" src="' + video_play_link +
-                        '"></iframe><br>' + value.name + '<br>';
-                    videoDiv += '</div>';
-                });
-                // console.log(videoDiv);
-                $("#videoDiv").html(videoDiv);
-            },
-            error: (data) => {
                 console.log(data);
+                $.each(data.prices, (key, value) => {
+                    var s = new Date(value[0]).toLocaleDateString("en-US")
+                    time.push(s);
+                    val.push(value[1]);
+                });
+                
+                // let date = new Date();
+                // document.getElementById('desc').innerHTML = data.description.en;
+            },
+            error: (error) => {
+                console.log(error);
             }
+
         });
 
+        // graph plotting
+    
+    const ctx = document.getElementById('myChart');
+    if(myChart!=null){
+        myChart.destroy();
+    }
+    myChart=new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: time,
+            datasets: [{
+                label: 'Price: ',
+                data: val,
+                borderWidth: 2,
+                // borderColor: '#d0d0d0',
+                // backgroundColor: '#d0d0d0',
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    // beginAtZero: true
+                },
+                x:{
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    });
     }
 </script>
 
